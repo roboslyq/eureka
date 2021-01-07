@@ -1,4 +1,4 @@
-# eureka编译安装
+# Eureka安装
 
 > eureka版本为当前最新版：1.10.12-SANPSHOT。如果版本不一样，下面的一些细节操作和结果可能会不一样。请以实际的版本为准。
 
@@ -6,7 +6,7 @@
 
 - Gradle
 
-  - 默认会下载gradle-6.3 版本。所以我们最好是使用此gradle版本，大于或者小于均可能因为版本不兼容而出现问题。
+  - 默认会下载gradle-6.3 版本。大于或者小于均可能因为版本不兼容而出现各种神奇的问题，所以我们最好是使用此gradle版本而避免一些因为不兼容而带来的不必要的麻烦。
 
   - 例如以下异常
 
@@ -19,11 +19,22 @@
 
     ![image-20210107230029713](images/eureka环境编译安装/image-20210107230029713.png)
 
+  上图“BUILD SUCCESSSFUL ”对应的命令如下：
+
+  >  gradle clean build -x test
+
+  
+
 - Git
+
   - 没有版本要求，能正常从git下载代码即可。
+
 - JDK
+
   - 1.8+
+
 - 网络准备
+
   - 很有必要"翻墙"，因为gradle默认下载均是需要“翻墙”的。
 
 ## 2、下载源码
@@ -45,7 +56,7 @@ cd eureka
 ./gradlew clean build
 ```
 
-- windows下
+- windows下(一)
 
 ```shell
 D:\IdeaProjects\eureka>gradle clean build
@@ -57,15 +68,25 @@ D:\IdeaProjects\eureka>gradle clean build -x test
 
 > 如果有一些报错，请调整IDEA 或者 Gradle版本。同时，最好能够正常的访问"外网"
 
+- windows下(二)
+
+使用eureka项目自已的gradlew.bat脚本，此需要会默认下载gradle-6.3-bin.zip(此处需要翻墙^_^)，
+
+![image-20210108000232604](images/eureka环境编译安装/image-20210108000232604.png)
+
+
+
 build完成后，会在对应的项目生成结果文件：
 
 ![image-20210107225029313](images/eureka环境编译安装/image-20210107225029313.png)
+
+-
 
 将对应的war包修改名称为eurake.war，然后放置到tomcat的webapps目录下，启动tomcat即可。
 
 ![image-20210107225154049](images/eureka环境编译安装/image-20210107225154049.png)
 
-> 正常情况启动会报错：cannot create an request 
+> 正常情况启动会报错：com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
 
 原因是eurake机制决定的，当eureka-server启动时，会将自已当作一个服务注册的注册中心,也就是当前服务本身。
 
